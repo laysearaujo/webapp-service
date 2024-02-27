@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ifood
+      POSTGRES_USER: ifooduser
+      POSTGRES_PASSWORD: ifoodpassword
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - ifoodnetwork
+
+  web:
+    build: .
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "80:5000"
+    networks:
+      - ifoodnetwork
+
+volumes:
+  db_data:
+
+networks:
+  ifoodnetwork:
+    driver: bridge
